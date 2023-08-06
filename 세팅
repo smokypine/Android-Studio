@@ -1,0 +1,82 @@
+내 데스크톱에서 새로운 프로젝트를 만들 때 필요한 설정 정리
+
+1. File -> Project Structure -> SDK Location -> Gradle Settings -> Gradle Jdk : corretto-16 으로 변경
+
+2. Gradle Scripts에 있는 build.gradle(:app) 코드를 다음과 같이 수정
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.example.myapplication"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+    implementation "com.yuyakaido.android:card-stack-view:2.3.4"
+
+}
+
+
+3. build.gradle(My Application) 코드를 다음과 같이 수정
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+4. gradle.properties 하단에 android.suppressUnsupportedCompileSdk=33 기입.
+
+5. Tools -> SDK Manager -> SDK Platforms 에서 Android API 33을 다운로드.
+
+6. Tools -> SDK Manager -> SDK Tools -> Show Package Details를 체크하여 위의 Android Api 33에 대응하는 Android SDK Build-Tools 33을 체크하고 다운로드.
+
+7. 메뉴바 우측 상단의 Available Device를 클릭하여 AVD Manager -> Create Virtual Device -> API 33, API 31 작성.
+
+8. API 33이 작동이 안 될 경우 API 31 실행.
